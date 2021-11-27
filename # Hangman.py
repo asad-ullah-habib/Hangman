@@ -1,8 +1,6 @@
 import random
 
-# variables
-
-
+# global variables
 max_tries = 3
 max_errors = 3
 list_of_words = ['Enter', 'your', 'own', 'words', 'for', 'this', 'list']
@@ -20,10 +18,10 @@ def list_to_string(s):  # helper function( just hide )
     return str1
 
 
-def initialise(word):  # a welcome script. Ignore
+def initialise(w):  # a welcome script. Ignore
     print('Welcome to Hangman!' + '\n' + 'You have', max_tries, 'available lives')
-    print('Your word has', len(word), 'letters')
-    print('_' * len(word))
+    print('Your word has', len(w), 'letters')
+    print('_' * len(w))
 
 
 def main_program():
