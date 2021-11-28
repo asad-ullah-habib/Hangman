@@ -1,14 +1,52 @@
 import random
 
 # global variables
-max_tries = 3
+max_tries = 7
 max_errors = 3
-list_of_words = ['Enter', 'your', 'own', 'words', 'for', 'this', 'list']
+user_attempts = 0
+list_of_words = 'thr four fivee sixsix sevennn eightttt'.split()
 for i in range(len(list_of_words)):  # capitalise all list
     list_of_words[i] = list_of_words[i].upper()
 guessed = []  # list of guessed words
-list_of_letters = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh',
-                   'Eighth']  # needed for print statement, assuming max characters in a word are eight
+list_of_letters =  'First Second Third Fourth Fifth Sixth Seventh Eighth'.split()   # needed for print statement,
+# assuming max characters in a word are eight
+
+hangman_stages = ['''
+   +---+
+       |
+       |
+       |
+      === ''', '''
+   +---+
+   O   |
+       |
+       |
+      ===''', '''
+   +---+
+   O   |
+   |   |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|   |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+       |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+  /    |
+      ===''', '''
+   +---+
+   O   |
+  /|\  |
+  / \  |
+      ===''']
 
 
 def list_to_string(s):  # helper function( just hide )
@@ -19,13 +57,13 @@ def list_to_string(s):  # helper function( just hide )
 
 
 def initialise(w):  # a welcome script. Ignore
-    print('Welcome to Hangman!' + '\n' + 'You have', max_tries, 'available lives')
+    print('Welcome to Hangman! You have', max_tries, 'available lives. Use them wisely 😄')
     print('Your word has', len(w), 'letters')
     print('_' * len(w))
 
 
-def main_program():
-    user_tries = 0
+def main_program(user_attempts):
+    user_tries = user_attempts
     error_counter = 0
     counter_for_letter = 0
     word = list_of_words[random.randint(0, len(list_of_words) - 1)]  # to choose word
@@ -65,8 +103,10 @@ def main_program():
                 else:
                     if user_tries < max_tries - 1:
                         print('Fail! Try Again')
+                        print(hangman_stages[user_tries])
                     else:
                         print('You used all your tries. Game Lost!')
+                        print(hangman_stages[user_tries])
                     guessed.append(user_try)  # make a list of words user has guessed
                     user_tries += 1
 
@@ -78,4 +118,4 @@ def main_program():
                 break
 
 
-main_program()
+main_program(user_attempts)
