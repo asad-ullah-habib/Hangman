@@ -1,26 +1,14 @@
-import random
+import random, time, sys
 
 # global variables
-max_tries = 7
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth'.split()   # needed for print statement,....
-# assuming max characters in a word are eight
-
-master_dict = {'Places': 'Multan Karachi Islamabad Rawalpindi Hyderabad '.split(),  # dictionary of words(tentative)
-               'Flavours': 'Vanilla chocolate strawberry berry'.split()
+list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth'.split()  # needed for print
+master_dict = {'Cities Of Pakistan': 'Multan Karachi Islamabad Rawalpindi Hyderabad '.split(),  # dictionary of words
+               'Flavours of Ice-cream': 'Vanilla chocolate strawberry berry'.split(),
+               'Objects': 'table chair bag book dustbin door'.split()
                }
-for k in master_dict:  # capitalise every value in dictionary
-    for i in range(len(master_dict[k])):  # capitalise all list
-        master_dict[k][i] = master_dict[k][i].upper()
-
-# to choose a random key(category) and value(word within that category)
-word_key_value = random.choice(list(master_dict.keys()))
-word_index_value = random.randint(0, len(master_dict[word_key_value]) - 1)
-generated_word = master_dict[word_key_value][word_index_value]
-
-# pictionary of hangman
 hangman_stages = ['''
    +---+
        |
@@ -57,6 +45,28 @@ hangman_stages = ['''
   /|\  |
   / \  |
       ===''']
+# pictionary of hangman (minimised)
+
+
+def choose_a_word(dictionary):
+    master_dict = dictionary
+    for k in master_dict:  # capitalise every value in dictionary
+        for i in range(len(master_dict[k])):  # capitalise all list
+            master_dict[k][i] = master_dict[k][i].upper()
+
+    # to choose a random key(category) and value(word within that category)
+    global word_key_value
+    word_key_value = random.choice(list(master_dict.keys()))
+    word_index_value = random.randint(0, len(master_dict[word_key_value]) - 1)
+    return master_dict[word_key_value][word_index_value]
+
+
+def slow_print(t):
+    for i in t:
+        sys.stdout.write(i)
+        sys.stdout.flush()
+        time.sleep(0)  # change later #
+    print('')
 
 
 def list_to_string(s):  # helper function( just hide )
@@ -67,22 +77,51 @@ def list_to_string(s):  # helper function( just hide )
 
 
 def initialise(w):  # a welcome script. Ignore
-    print('Welcome to Hangman! You have', max_tries, 'available lives. Use them wisely 😄')
-    print('Your word has', len(w), 'letters\nYour word is in the category:', word_key_value)
+
+    slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
+    print('Your word has', len(w), 'letters\n Your word is in the category:', word_key_value)
     print('_' * len(w))
 
 
-def main_program(user_tries, word):
+def difficulty():
+    while True:
+        ask = input('Do you want to choose a difficulty level? [y/n]:')
+        if len(ask) == 1 and ask.isalpha() is True:  # checking input
+            ask = ask.lower()
+            if ask == 'y':
+                for i in range(max_errors + 1):
+                    hangman_difficulty = input('Choose your difficulty: Easy[ 1 ], Medium[ 2 ] or Hard [ 3 ]: ')
+                    if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True:
+                        if hangman_difficulty == '1':
+                            return 7
+                        elif hangman_difficulty == '2':
+                            return 5
+                        elif hangman_difficulty == '3':
+                            return 3
+                    else:
+                        print('Input Error. Enter a Valid Value.')
 
+            elif ask == 'n':
+                return 7
+
+        else:
+            print('Input Error. Enter a Valid Value.'
+                  '\nValue has to be either Y or N ')
+
+
+def main_program(user_tries, word,  difficulty_level):
     error_counter = 0
     counter_for_letter = 0
-    chars_in_word = ['_'] * (len(word))  # used to display the words user got right
+    try:
+        max_tries = difficulty_level
 
-    initialise(word)  # program starts
+    except TypeError:
+        print('Input Error. Enter a Valid Value.'
+              '\nValue has to be either Y or N ')
 
     while user_tries <= max_tries - 1:
-        print('Try to guess your', list_of_letters[counter_for_letter], 'letter: ')  # Taking Input
-        user_try = input()
+        user_try = input('Try to guess your ' + str(list_of_letters[counter_for_letter]) + ' letter: ')
+
 
         if len(user_try) == 1 and user_try.isalpha() is True:  # checking input
             user_try = user_try.upper()  # capitalising
@@ -129,4 +168,7 @@ def main_program(user_tries, word):
                 break
 
 
-main_program(number_of_attempts , generated_word)
+generated_word = choose_a_word(master_dict)
+chars_in_word = ['_'] * (len(generated_word))  # used to display the words user got right
+initialise(generated_word)  # program starts
+main_program(number_of_attempts, generated_word, difficulty())  # while loop
