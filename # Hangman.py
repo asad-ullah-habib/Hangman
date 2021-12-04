@@ -1,45 +1,51 @@
-import random, time, sys
+import os
+import random
+import sys
+import time
 
 # global variables
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
+clear = "\n" * 100  # may remove this. Used to clear console
+speed = 0.05  # speed of print statements
+word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth'.split()  # needed for print
 master_dict = {'Cities Of Pakistan': 'Multan Karachi Islamabad Rawalpindi Hyderabad '.split(),  # dictionary of words
-               'Flavours of Ice-cream': 'Vanilla chocolate strawberry berry'.split(),
+               'Flavours of Ice-cream': 'Vanilla chocolate strawberry blueberry  '.split(),
                'Objects': 'table chair bag book dustbin door'.split()
                }
-hangman_stages = ['''
+hangman_stages = [r'''
    +---+
        |
        |
        |
-      === ''', '''
+      === ''', r'''
    +---+
    O   |
        |
        |
-      ===''', '''
+      ===''', r'''
    +---+
    O   |
    |   |
        |
-      ===''', '''
+      ===''', r'''
    +---+
    O   |
   /|   |
        |
-      ===''', '''
+      ===''', r'''
    +---+
    O   |
   /|\  |
        |
-      ===''', '''
+      ===''', r'''
    +---+
    O   |
   /|\  |
   /    |
-      ===''', '''
+      ===''', r'''
    +---+
    O   |
   /|\  |
@@ -48,6 +54,10 @@ hangman_stages = ['''
 
 
 # pictionary of hangman (minimised)
+
+
+def cls():  # also used to clear console
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def choose_a_word(dictionary):
@@ -66,7 +76,7 @@ def slow_print(t):
     for i in t:
         sys.stdout.write(i)
         sys.stdout.flush()
-        time.sleep(0.02)  # change later #
+        time.sleep(speed)  # change later #
     print('')
 
 
@@ -78,7 +88,7 @@ def list_to_string(s):  # helper function( just hide )
 
 
 def initialise(w):  # a welcome script. Ignore
-
+    print('-' * 100)
     slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
     slow_print('Your word has ' + str(len(w)) + ' letters\nYour word is in the category: ' + str(word_key_value))
     slow_print('_' * len(w))
@@ -124,7 +134,7 @@ def main_program(user_tries, word, difficulty_level):
             user_try = user_try.upper()  # capitalising
 
             if user_try in word and user_try not in guessed:  # if guess is correct
-                print('You are Correct!')
+                slow_print('You are Correct!')
                 counter_for_letter += 1
                 func_word = word  # made for use in the for loop below (can be ignored)
 
@@ -138,7 +148,7 @@ def main_program(user_tries, word, difficulty_level):
                 slow_print(str(list_to_string(chars_in_word)))  # print letters user got right
 
                 if word == list_to_string(chars_in_word):  # if user wins. print win statement
-                    slow_print('You won!. Congratulations!!!!')
+                    slow_print('You won!. Congratulations!!!! \nHave a chocolate.')
                     break
 
             elif user_try not in word:  # if guess is incorrect
@@ -147,8 +157,10 @@ def main_program(user_tries, word, difficulty_level):
 
                 else:
                     if user_tries < max_tries - 1:
-                        slow_print('Your guess is incorrect.\n Try Again')
-                        print(hangman_stages[user_tries])
+                        slow_print('Your guess is incorrect.\nTry Again')
+                        slow_print(hangman_stages[user_tries])
+                        slow_print(str(list_to_string(chars_in_word)))
+
                     else:
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
@@ -157,11 +169,12 @@ def main_program(user_tries, word, difficulty_level):
                     user_tries += 1
 
         else:
-            print('Input Error. Enter a Valid Value.'
-                  '\nValue has to be a single character from the English Alphabet')
+            slow_print('Input Error. Enter a Valid Value.'
+                       '\nValue has to be a single character from the English Alphabet')
             error_counter += 1
             if error_counter > max_errors:
-                print('Too many Input Errors!. Game over')
+                slow_print('Too many Input Errors!.\nYou get to shit over my program 3 times.'
+                           '\nYou have successfully done that. Game over!')
                 break
 
 
