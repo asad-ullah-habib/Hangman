@@ -11,9 +11,9 @@ clear = "\n" * 100  # may remove this. Used to clear console
 speed = 0.05  # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth'.split()  # needed for print
-master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisalabad Gujrat Jacobabad '.split(),  # dictionary of words
-               'Shows/Series/Movie': 'Lucifer Peaky-Bliders Squid-Game Twilight Money-Heist Annabelle Home-alone Harry-Potter'.split(),
-               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
+master_dict = {'Cities Of Pakistan': 'Multan Karachi Islamabad Rawalpindi Hyderabad '.split(),  # dictionary of words
+               'Flavours of Ice-cream': 'Vanilla chocolate strawberry blueberry  '.split(),
+               'Objects': 'table chair bag book dustbin door'.split()
                }
 hangman_stages = [r'''
    +---+
@@ -57,9 +57,8 @@ hangman_stages = [r'''
 
 
 def cls():  # also used to clear console
-    os.system('cls' if os.name == 'nt' else 'clear') # capitalise every value in dictionary
-        #for i in range(len(dictionary[k])):  # capitalise all list
-           ## dictionary[k][i] = dictionary[k][i].upper()#
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 
 def choose_a_word(dictionary):
     for k in dictionary:  # capitalise every value in dictionary
@@ -70,10 +69,7 @@ def choose_a_word(dictionary):
     global word_key_value
     word_key_value = random.choice(list(dictionary.keys()))
     word_index_value = random.randint(0, len(dictionary[word_key_value]) - 1)
-    return dictionary[word_key_value][word_index_value] 
-    
-
-
+    return dictionary[word_key_value][word_index_value]
 
 
 def slow_print(t):
@@ -96,44 +92,6 @@ def initialise(w):  # a welcome script. Ignore
     slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
     slow_print('Your word has ' + str(len(w)) + ' letters\nYour word is in the category: ' + str(word_key_value))
     slow_print('_' * len(w))
-
-def category():
-    while True:
-        slow_print('Do you want to choose a category? Press y for yes or Press n for no')
-        ask = input()
-        if len(ask) == 1 and ask.isalpha() is True:  # checking input
-            ask = ask.lower()
-            if ask == 'y':
-                for i in range(max_errors + 1):
-                    slow_print('Choose your category: Press 1 for Cities Of Pakistan, Press 2 for Shows/Series/Movie or Press 3 for places in Habib: ')
-                    Choose= input()
-                    if len(Choose) == 1 and Choose.isnumeric() is True:
-                        if Choose == "1":
-                            Cities = master_dict['Cities Of Pakistan']
-                            word_key_value = random.choice(list(Cities))
-                            C = choose_a_word(word_key_value)
-                            return C
-                        elif Choose == "2":
-                            Sho = master_dict['Shows/Series/Movie']
-                            word_key_value = random.choice(list(Sho))
-                            S = choose_a_word(word_key_value)
-                            return S
-                        elif Choose == "3":
-                            Habib = master_dict['Habib']
-                            word_key_value = random.choice(list(Habib))
-                            H = choose_a_word(word_key_value)
-                            return H
-                    else:
-                        print('Input Error. Enter a Valid Value.')
-
-            elif ask == 'n':
-                R = choose_a_word("1")
-                return R
-
-        else:
-            print('Input Error. Enter a Valid Value.'
-                  '\nValue has to be either y or n')
-
 
 
 def difficulty():
@@ -219,9 +177,8 @@ def main_program(user_tries, word, difficulty_level):
                            '\nYou have successfully done that. Game over!')
                 break
 
-Cat = category()
-generated_word = Cat
-print(generated_word)
+
+generated_word = choose_a_word(master_dict)
 chars_in_word = ['_'] * (len(generated_word))  # used to display the words user got right
 initialise(generated_word)  # program starts
 main_program(number_of_attempts, generated_word, difficulty())  # while loop
