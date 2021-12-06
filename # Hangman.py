@@ -7,12 +7,14 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-clear = "\n" * 100  # may remove this. Used to clear console
-speed = 0.05  # speed of print statements
+# clear = "\n" * 100  # may remove this. Used to clear console
+speed = 0  # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth'.split()  # needed for print
-master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisalabad Gujrat Jacobabad '.split(),  # dictionary of words
-               'Shows/Series/Movie': 'Lucifer Peaky-Bliders Squid-Game Twilight Money-Heist Annabelle Home-alone Harry-Potter'.split(),
+master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisalabad Gujrat Jacobabad '.split(),
+               # dictionary of words
+               'Shows/Series/Movie': 'Lucifer Peaky-Bliders Squid-Game Twilight Money-Heist '
+                                     'Annabelle Home-alone Harry-Potter'.split(),
                'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                }
 hangman_stages = [r'''
@@ -53,27 +55,19 @@ hangman_stages = [r'''
       ===''']
 
 
-# pictionary of hangman (minimised)
-
-
 def cls():  # also used to clear console
-    os.system('cls' if os.name == 'nt' else 'clear') # capitalise every value in dictionary
-        #for i in range(len(dictionary[k])):  # capitalise all list
-           ## dictionary[k][i] = dictionary[k][i].upper()#
+    os.system('cls' if os.name == 'nt' else 'clear')  # capitalise every value in dictionary
 
-def choose_a_word(dictionary):
+
+def choose_a_word(dictionary, key_value):
     for k in dictionary:  # capitalise every value in dictionary
         for i in range(len(dictionary[k])):  # capitalise all list
             dictionary[k][i] = dictionary[k][i].upper()
 
-    # to choose a random key(category) and value(word within that category)
-    global word_key_value
-    word_key_value = random.choice(list(dictionary.keys()))
-    word_index_value = random.randint(0, len(dictionary[word_key_value]) - 1)
-    return dictionary[word_key_value][word_index_value] 
-    
+    key_values = list(master_dict)[key_value]
 
-
+    word_index_value = random.randint(0, len(dictionary[key_values]) - 1)
+    return dictionary[key_values][word_index_value]
 
 
 def slow_print(t):
@@ -92,48 +86,48 @@ def list_to_string(s):  # helper function( just hide )
 
 
 def initialise(w):  # a welcome script. Ignore
-    print('-' * 100)
-    slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
-    slow_print('Your word has ' + str(len(w)) + ' letters\nYour word is in the category: ' + str(word_key_value))
+
+    slow_print('Your word has ' + str(len(w)) + ' letters.')
     slow_print('_' * len(w))
 
-def category():
+
+def category_and_word():
     while True:
-        slow_print('Do you want to choose a category? Press y for yes or Press n for no')
+        print('-' * 100)
+        slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
+        slow_print('Do you want to choose a category? Press [Y/N]:')
         ask = input()
         if len(ask) == 1 and ask.isalpha() is True:  # checking input
             ask = ask.lower()
+
             if ask == 'y':
                 for i in range(max_errors + 1):
-                    slow_print('Choose your category: Press 1 for Cities Of Pakistan, Press 2 for Shows/Series/Movie or Press 3 for places in Habib: ')
-                    Choose= input()
-                    if len(Choose) == 1 and Choose.isnumeric() is True:
-                        if Choose == "1":
-                            Cities = master_dict['Cities Of Pakistan']
-                            word_key_value = random.choice(list(Cities))
-                            C = choose_a_word(word_key_value)
-                            return C
-                        elif Choose == "2":
-                            Sho = master_dict['Shows/Series/Movie']
-                            word_key_value = random.choice(list(Sho))
-                            S = choose_a_word(word_key_value)
-                            return S
-                        elif Choose == "3":
-                            Habib = master_dict['Habib']
-                            word_key_value = random.choice(list(Habib))
-                            H = choose_a_word(word_key_value)
-                            return H
+                    slow_print(
+                        'Choose your category: Press 1 for Cities Of Pakistan, Press 2 for Shows/Series/Movie or '
+                        'Press 3 for Places in Habib: ')
+                    choose = input()
+                    if len(choose) == 1 and choose.isnumeric() is True:
+                        if choose == "1":
+
+                            return choose_a_word(master_dict, 0)
+                        elif choose == "2":
+
+                            return choose_a_word(master_dict, 1)
+                        elif choose == "3":
+
+                            return choose_a_word(master_dict, 2)
+                        else:
+                            print('Input Error. Enter a Valid Value.')
                     else:
                         print('Input Error. Enter a Valid Value.')
 
             elif ask == 'n':
-                R = choose_a_word("1")
-                return R
+                x = random.randint(0, len(master_dict))
 
+                return choose_a_word(master_dict, x)
         else:
             print('Input Error. Enter a Valid Value.'
                   '\nValue has to be either y or n')
-
 
 
 def difficulty():
@@ -164,12 +158,13 @@ def difficulty():
                   '\nValue has to be either y or n')
 
 
-def main_program(user_tries, word, difficulty_level):
+def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = difficulty_level
+    max_tries = 7  # removed 'difficulty' form here
     while user_tries <= max_tries - 1:
         slow_print('Try to guess your ' + str(list_of_letters[counter_for_letter]) + ' letter: ')
+        print(word)
         user_try = input()
 
         if len(user_try) == 1 and user_try.isalpha() is True:  # checking input
@@ -206,7 +201,7 @@ def main_program(user_tries, word, difficulty_level):
                     else:
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
-                        print(hangman_stages[user_tries])
+
                     guessed.append(user_try)  # make a list of words user has guessed
                     user_tries += 1
 
@@ -219,9 +214,8 @@ def main_program(user_tries, word, difficulty_level):
                            '\nYou have successfully done that. Game over!')
                 break
 
-Cat = category()
-generated_word = Cat
-print(generated_word)
-chars_in_word = ['_'] * (len(generated_word))  # used to display the words user got right
+
+generated_word = category_and_word()
 initialise(generated_word)  # program starts
-main_program(number_of_attempts, generated_word, difficulty())  # while loop
+chars_in_word = ['_'] * (len(generated_word))  # used to display the words user got right
+main_program(number_of_attempts, generated_word)  # while loop
