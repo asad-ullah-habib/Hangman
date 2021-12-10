@@ -1,4 +1,4 @@
-import os
+
 import random
 import sys
 import time
@@ -7,13 +7,16 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-clear = "\n" * 100  # may remove this. Used to clear console
-speed = 0.05  # speed of print statements
+# clear = "\n" * 100  # may remove this. Used to clear console
+speed = 0  # speed of print statements
 word_key_value = ''
-list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth'.split()  # needed for print
-master_dict = {'Cities Of Pakistan': 'Multan Karachi Islamabad Rawalpindi Hyderabad '.split(),  # dictionary of words
-               'Flavours of Ice-cream': 'Vanilla chocolate strawberry blueberry  '.split(),
-               'Objects': 'table chair bag book dustbin door'.split()
+list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
+                  'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print
+master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisalabad Gujrat Jacobabad '.split(),
+               # dictionary of words
+               'Shows/Series/Movie': 'Lucifer Peaky-Blinders Squid-Game Twilight Money-Heist '
+                                     'Annabelle Home-alone Harry-Potter'.split(),
+               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                }
 hangman_stages = [r'''
    +---+
@@ -53,23 +56,13 @@ hangman_stages = [r'''
       ===''']
 
 
-# pictionary of hangman (minimised)
-
-
-def cls():  # also used to clear console
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-
-def choose_a_word(dictionary):
+def choose_a_word(dictionary, key_value):
     for k in dictionary:  # capitalise every value in dictionary
         for i in range(len(dictionary[k])):  # capitalise all list
             dictionary[k][i] = dictionary[k][i].upper()
-
-    # to choose a random key(category) and value(word within that category)
-    global word_key_value
-    word_key_value = random.choice(list(dictionary.keys()))
-    word_index_value = random.randint(0, len(dictionary[word_key_value]) - 1)
-    return dictionary[word_key_value][word_index_value]
+    key_values = list(master_dict)[key_value]
+    word_index_value = random.randint(0, len(dictionary[key_values]) - 1)
+    return dictionary[key_values][word_index_value]
 
 
 def slow_print(t):
@@ -87,11 +80,44 @@ def list_to_string(s):  # helper function( just hide )
     return str1
 
 
-def initialise(w):  # a welcome script. Ignore
-    print('-' * 100)
-    slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
-    slow_print('Your word has ' + str(len(w)) + ' letters\nYour word is in the category: ' + str(word_key_value))
-    slow_print('_' * len(w))
+def category_and_word():
+    while True:
+        print('-' * 75)
+        slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
+        slow_print('Do you want to choose a category? Press [Y/N]:')
+        ask = input()
+        if len(ask) == 1 and ask.isalpha() is True:  # checking input
+            ask = ask.lower()
+
+            if ask == 'y':
+                for i in range(max_errors + 1):
+                    slow_print(
+                        'Choose your category:\n'
+                        'Press 1 for Cities Of Pakistan\n'
+                        'Press 2 for Shows/Series/Movie\n'
+                        'Press 3 for Places in Habib: ')
+                    choose = input()
+                    if len(choose) == 1 and choose.isnumeric() is True:
+                        if choose == "1":
+
+                            return choose_a_word(master_dict, 0)
+                        elif choose == "2":
+
+                            return choose_a_word(master_dict, 1)
+                        elif choose == "3":
+
+                            return choose_a_word(master_dict, 2)
+                        else:
+                            print('Input Error. Enter a Valid Value.')
+                    else:
+                        print('Input Error. Enter a Valid Value.')
+
+            elif ask == 'n':
+                x = random.randint(0, len(master_dict) - 1)
+                return choose_a_word(master_dict, x)
+        else:
+            print('Input Error. Enter a Valid Value.'
+                  '\nValue has to be either y or n')
 
 
 def difficulty():
@@ -122,12 +148,31 @@ def difficulty():
                   '\nValue has to be either y or n')
 
 
-def main_program(user_tries, word, difficulty_level):
+def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = difficulty_level
+    max_tries = 7  # removed 'difficulty' form here
+
+    chars_in_word = []
+    if generated_word.find('-') == -1:
+        chars_in_word.extend(['_'] * (len(generated_word)))  # used to display the words user got right
+    else:
+        for i in range(len(generated_word)):
+            if generated_word[i] == '-':
+                chars_in_word.extend(' ')
+            else:
+                chars_in_word.extend('_')
+
+    if word.find('-') == -1:
+        slow_print('Your word has ' + str(len(word)) + ' letters.')
+    else:
+        slow_print('Your word has ' + str(len(word) - 1) + ' letters.')
+
+    slow_print(str(list_to_string(chars_in_word)))
+
     while user_tries <= max_tries - 1:
         slow_print('Try to guess your ' + str(list_of_letters[counter_for_letter]) + ' letter: ')
+
         user_try = input()
 
         if len(user_try) == 1 and user_try.isalpha() is True:  # checking input
@@ -136,8 +181,8 @@ def main_program(user_tries, word, difficulty_level):
             if user_try in word and user_try not in guessed:  # if guess is correct
                 slow_print('You are Correct!')
                 counter_for_letter += 1
+                guessed.append(user_try)
                 func_word = word  # made for use in the for loop below (can be ignored)
-
                 for u in range(len(word)):
                     if func_word.find(user_try) == -1:  # check if char is not in word
                         break
@@ -147,38 +192,36 @@ def main_program(user_tries, word, difficulty_level):
                         func_word = func_word.replace(user_try, str(u), 1)  # modify func_word
                 slow_print(str(list_to_string(chars_in_word)))  # print letters user got right
 
-                if word == list_to_string(chars_in_word):  # if user wins. print win statement
+                if word.replace('-', ' ') == list_to_string(chars_in_word):  # if user wins. print win statement
                     slow_print('You won!. Congratulations!!!! \nHave a chocolate.')
+                    time.sleep(2)  # Slow down program
                     break
 
-            elif user_try not in word:  # if guess is incorrect
+            else:  # if guess is incorrect
                 if user_try in guessed:
-                    slow_print('You have already guessed this!\nTry again.')
+                    slow_print('You have already guessed this!')
 
                 else:
                     if user_tries < max_tries - 1:
                         slow_print('Your guess is incorrect.\nTry Again')
                         slow_print(hangman_stages[user_tries])
                         slow_print(str(list_to_string(chars_in_word)))
+                        guessed.append(user_try)  # make a list of words user has guessed
+                        user_tries += 1
 
                     else:
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
-                        print(hangman_stages[user_tries])
-                    guessed.append(user_try)  # make a list of words user has guessed
-                    user_tries += 1
 
         else:
             slow_print('Input Error. Enter a Valid Value.'
                        '\nValue has to be a single character from the English Alphabet')
             error_counter += 1
             if error_counter > max_errors:
-                slow_print('Too many Input Errors!.\nYou get to shit over my program 3 times.'
-                           '\nYou have successfully done that. Game over!')
+                slow_print('Too many Input Errors!.\n'
+                           'Game over!')
                 break
 
 
-generated_word = choose_a_word(master_dict)
-chars_in_word = ['_'] * (len(generated_word))  # used to display the words user got right
-initialise(generated_word)  # program starts
-main_program(number_of_attempts, generated_word, difficulty())  # while loop
+generated_word = category_and_word()
+main_program(number_of_attempts, generated_word)
