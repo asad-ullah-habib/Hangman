@@ -151,7 +151,7 @@ def difficulty():
 def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = 7  # removed 'difficulty' form here
+    max_tries = difficulty()  # removed 'difficulty' form here
 
     chars_in_word = []
     if generated_word.find('-') == -1:
