@@ -4,8 +4,8 @@ import sys
 import time
 
 # global variables
-max_errors = 3
-number_of_attempts = 0  # added this to fix a bug
+max_errors = 5
+number_of_attempts = 0  # added this to fix a bug(accumalator)
 guessed = []  # list of guessed words
 # clear = "\n" * 100  # may remove this. Used to clear console
 speed = 0  # speed of print statements
