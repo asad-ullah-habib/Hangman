@@ -8,7 +8,7 @@ max_errors = 5
 number_of_attempts = 0  # added this to fix a bug(accumalator)
 guessed = []  # list of guessed words
 # clear = "\n" * 100  # may remove this. Used to clear console
-speed = 0  # speed of print statements
+speed = 0.02  # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print
@@ -16,7 +16,8 @@ master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisal
                # dictionary of words
                'Shows/Series/Movie': 'Lucifer Peaky-Blinders Squid-Game Twilight Money-Heist '
                                      'Annabelle Home-alone Harry-Potter'.split(),
-               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
+               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground Dhabba '
+                        'info-commons ehsas-center student-lounge'.split()
                }
 hangman_stages = [r'''
    +---+
@@ -69,7 +70,7 @@ def slow_print(t):
     for i in t:
         sys.stdout.write(i)
         sys.stdout.flush()
-        time.sleep(speed)  # change later #
+        time.sleep(speed)
     print('')
 
 
@@ -128,9 +129,10 @@ def difficulty():
             ask = ask.lower()
             if ask == 'y':
                 for i in range(max_errors + 1):
-                    slow_print('Choose your difficulty: Easy[ 1 ], Medium[ 2 ] or Hard [ 3 ]: ')
+                    slow_print('Choose your difficulty: Easy[ 1 ], Medium[ 2 ] or Hard[ 3 ]: ')
                     hangman_difficulty = input()
-                    if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True:
+
+                    if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True and hangman_difficulty in ['1', '2', '3']:
                         if hangman_difficulty == '1':
                             return 7
                         elif hangman_difficulty == '2':
@@ -151,7 +153,7 @@ def difficulty():
 def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = 7  # removed 'difficulty' form here
+    max_tries = difficulty()  # removed 'difficulty' form here
 
     chars_in_word = []
     if generated_word.find('-') == -1:
@@ -212,6 +214,8 @@ def main_program(user_tries, word):
                     else:
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
+                        slow_print('Your word was:' + word)
+                        break
 
         else:
             slow_print('Input Error. Enter a Valid Value.'
