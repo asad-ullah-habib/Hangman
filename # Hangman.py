@@ -1,7 +1,7 @@
 import random
 import sys
 import time
-
+#HEllO THIS IS A TEST
 # global variables
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
