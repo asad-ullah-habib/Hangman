@@ -1,4 +1,3 @@
-
 import random
 import sys
 import time
@@ -8,7 +7,7 @@ max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
 # clear = "\n" * 100  # may remove this. Used to clear console
-speed = 0.02  # speed of print statements
+speed = 0.09  # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print
@@ -16,8 +15,7 @@ master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisal
                # dictionary of words
                'Shows/Series/Movie': 'Lucifer Peaky-Blinders Squid-Game Twilight Money-Heist '
                                      'Annabelle Home-alone Harry-Potter'.split(),
-               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground Dhabba '
-                        'info-commons ehsas-center student-lounge'.split()
+               'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                }
 hangman_stages = [r'''
    +---+
@@ -70,7 +68,7 @@ def slow_print(t):
     for i in t:
         sys.stdout.write(i)
         sys.stdout.flush()
-        time.sleep(speed)
+        time.sleep(speed)  # change later #
     print('')
 
 
@@ -84,8 +82,9 @@ def list_to_string(s):  # helper function( just hide )
 def category_and_word():
     while True:
         print('-' * 75)
-        slow_print('Welcome to Hangman! \nYou have 7 available lives by default.')
-        slow_print('Do you want to choose a category? Press [Y/N]:')
+        slow_print(
+            'Welcome to Hangman! \nYou have 7 tries by default, but the tries will change if you would like to choose a difficulty level later on in the game.')
+        slow_print('Do you want to choose a category? Press Y for yes and N for no:')
         ask = input()
         if len(ask) == 1 and ask.isalpha() is True:  # checking input
             ask = ask.lower()
@@ -123,16 +122,20 @@ def category_and_word():
 
 def difficulty():
     while True:
-        slow_print('Do you want to choose a difficulty level? [y/n]')
+        slow_print('Do you want to choose a difficulty level? Press Y for yes press and N for no')
         ask = input()
         if len(ask) == 1 and ask.isalpha() is True:  # checking input
             ask = ask.lower()
             if ask == 'y':
                 for i in range(max_errors + 1):
-                    slow_print('Choose your difficulty: Easy[ 1 ], Medium[ 2 ] or Hard[ 3 ]: ')
-                    hangman_difficulty = input()
+                    slow_print(
+                        'Choose your difficulty:\n'
+                        'Press 1 for Easy (guess the word(s) in 7 tries)\n'
+                        'Press 2 for Medium (guess the word(s)  in 5 tries)\n'
+                        'Press 3 for Hard( guess the word(s) in 3 tries) ')
 
-                    if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True and hangman_difficulty in ['1', '2', '3']:
+                    hangman_difficulty = input()
+                    if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True:
                         if hangman_difficulty == '1':
                             return 7
                         elif hangman_difficulty == '2':
@@ -153,7 +156,7 @@ def difficulty():
 def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = difficulty()  # removed 'difficulty' form here
+    max_tries = difficulty()  # added 'difficulty'
 
     chars_in_word = []
     if generated_word.find('-') == -1:
@@ -206,16 +209,20 @@ def main_program(user_tries, word):
                 else:
                     if user_tries < max_tries - 1:
                         slow_print('Your guess is incorrect.\nTry Again')
-                        slow_print(hangman_stages[user_tries])
+                        print(hangman_stages[user_tries])
                         slow_print(str(list_to_string(chars_in_word)))
                         guessed.append(user_try)  # make a list of words user has guessed
                         user_tries += 1
+                        print("You have", max_tries - user_tries, "tries left!")
+
 
                     else:
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
-                        slow_print('Your word was:' + word)
+                        slow_print('The correct word(s) was:')
+                        slow_print(generated_word)
                         break
+
 
         else:
             slow_print('Input Error. Enter a Valid Value.'
