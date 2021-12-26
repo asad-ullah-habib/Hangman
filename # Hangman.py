@@ -5,8 +5,7 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-# clear = "\n" * 100  # may remove this. Used to clear console
-speed = 0.09  # speed of print statements
+speed = 0.04  # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print
@@ -16,6 +15,7 @@ master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisal
                                      'Annabelle Home-alone Harry-Potter'.split(),
                'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                }
+
 hangman_stages = [r'''
    +---+
        |
@@ -53,9 +53,10 @@ hangman_stages = [r'''
   / \  |
       ===''']
 
-def remove_hyphen(generated_word): # Made this function to remove hyphen '-' from the words in the end while displaying the generated word if incorrectly guessed.
-    x = generated_word.replace("-", " ")
-    return x
+
+def remove_hyphen(w): # Made this function to remove hyphen '-'
+    # from the words in the end while displaying the generated word if incorrectly guessed.
+    return  w.replace("-", " ")
 
 def choose_a_word(dictionary, key_value): # Choosig the word from the main dictionary randomly
     for k in dictionary:  # capitalise every value in dictionary
@@ -82,15 +83,14 @@ def list_to_string(s):  # helper function( just hide )
 
 
 def category_and_word(): # This will let the user choose a category, but word is chosen randomly from that category.
+    print('-' * 100)
+    slow_print(
+        'Welcome to Hangman! \nYou have 7 tries by default, but you can choose a difficulty level.')
+    slow_print('Do you want to choose a category? Press Y for yes and N for no:')
     while True:
-        print('-' * 75)
-        slow_print(
-            'Welcome to Hangman! \nYou have 7 tries by default, but you can choose a difficulty level.')
-        slow_print('Do you want to choose a category? Press Y for yes and N for no:')
         ask = input()
-        if len(ask) == 1 and ask.isalpha() is True:  # checking input
+        if len(ask) ==1 and ask.isalpha() is True:  # checking input
             ask = ask.lower()
-
             if ask == 'y':
                 for i in range(max_errors + 1):
                     slow_print(
@@ -113,10 +113,15 @@ def category_and_word(): # This will let the user choose a category, but word is
                             print('Input Error. Enter a Valid Value.')
                     else:
                         print('Input Error. Enter a Valid Value.')
+                x = random.randint(0, len(master_dict) - 1)
+                return choose_a_word(master_dict, x)
 
             elif ask == 'n':
                 x = random.randint(0, len(master_dict) - 1)
                 return choose_a_word(master_dict, x)
+            else:
+                print('Input Error. Enter a Valid Value.'
+                      '\nValue has to be either y or n')
         else:
             print('Input Error. Enter a Valid Value.'
                   '\nValue has to be either y or n')
@@ -129,13 +134,13 @@ def difficulty(): # let user choose a difficulty level
         if len(ask) == 1 and ask.isalpha() is True:  # checking input
             ask = ask.lower()
             if ask == 'y':
-                for i in range(max_errors + 1):
-                    slow_print(
-                        'Choose your difficulty:\n'
-                        'Press 1 for Easy (guess the word(s) in 7 tries)\n' # easy means all 7 tries
-                        'Press 2 for Medium (guess the word(s)  in 5 tries)\n' # medium means 5 tries to guess the word
-                        'Press 3 for Hard( guess the word(s) in 3 tries) ') # hard means only 3 chances will be given for guessing the word
+                slow_print(
+                    'Choose your difficulty:\n'
+                    'Press 1 for Easy (guess the word(s) in 7 tries)\n'  # easy means all 7 tries
+                    'Press 2 for Medium (guess the word(s) in 5 tries)\n'  # medium means 5 tries to guess the word
+                    'Press 3 for Hard( guess the word(s) in 3 tries) ')  # hard means only 3 chances will be given for guessing the word
 
+                for i in range(max_errors + 1):
                     hangman_difficulty = input()
                     if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True:
                         if hangman_difficulty == '1':
@@ -145,11 +150,13 @@ def difficulty(): # let user choose a difficulty level
                         elif hangman_difficulty == '3':
                             return 3
                     else:
-                        print('Input Error. Enter a Valid Value.')
-
+                        print('Input Error. Value has to be between 1 and 3')
+                print('Too many wrong inputs.')
             elif ask == 'n':
                 return 7
-
+            else:
+                print('Input Error. Enter a Valid Value.'
+                      '\nValue has to be either y or n')
         else:
             print('Input Error. Enter a Valid Value.'
                   '\nValue has to be either y or n')
@@ -181,7 +188,6 @@ def main_program(user_tries, word):
         slow_print('Try to guess your ' + str(list_of_letters[counter_for_letter]) + ' letter: ')
 
         user_try = input()
-
         if len(user_try) == 1 and user_try.isalpha() is True:  # checking input
             user_try = user_try.upper()  # capitalising
 
