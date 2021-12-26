@@ -53,8 +53,11 @@ hangman_stages = [r'''
   / \  |
       ===''']
 
+def remove_hyphen(generated_word): # Made this function to remove hyphen '-' from the words in the end while displaying the generated word if incorrectly guessed.
+    x = generated_word.replace("-", " ")
+    return x
 
-def choose_a_word(dictionary, key_value):
+def choose_a_word(dictionary, key_value): # Choosig the word from the main dictionary randomly
     for k in dictionary:  # capitalise every value in dictionary
         for i in range(len(dictionary[k])):  # capitalise all list
             dictionary[k][i] = dictionary[k][i].upper()
@@ -78,11 +81,11 @@ def list_to_string(s):  # helper function( just hide )
     return str1
 
 
-def category_and_word():
+def category_and_word(): # This will let the user choose a category, but word is chosen randomly from that category.
     while True:
         print('-' * 75)
         slow_print(
-            'Welcome to Hangman! \nYou have 7 tries by default, but the tries will change if you would like to choose a difficulty level later on in the game.')
+            'Welcome to Hangman! \nYou have 7 tries by default, but you can choose a difficulty level.')
         slow_print('Do you want to choose a category? Press Y for yes and N for no:')
         ask = input()
         if len(ask) == 1 and ask.isalpha() is True:  # checking input
@@ -119,7 +122,7 @@ def category_and_word():
                   '\nValue has to be either y or n')
 
 
-def difficulty():
+def difficulty(): # let user choose a difficulty level 
     while True:
         slow_print('Do you want to choose a difficulty level? Press Y for yes press and N for no')
         ask = input()
@@ -129,9 +132,9 @@ def difficulty():
                 for i in range(max_errors + 1):
                     slow_print(
                         'Choose your difficulty:\n'
-                        'Press 1 for Easy (guess the word(s) in 7 tries)\n'
-                        'Press 2 for Medium (guess the word(s)  in 5 tries)\n'
-                        'Press 3 for Hard( guess the word(s) in 3 tries) ')
+                        'Press 1 for Easy (guess the word(s) in 7 tries)\n' # easy means all 7 tries
+                        'Press 2 for Medium (guess the word(s)  in 5 tries)\n' # medium means 5 tries to guess the word
+                        'Press 3 for Hard( guess the word(s) in 3 tries) ') # hard means only 3 chances will be given for guessing the word
 
                     hangman_difficulty = input()
                     if len(hangman_difficulty) == 1 and hangman_difficulty.isnumeric() is True:
@@ -155,7 +158,7 @@ def difficulty():
 def main_program(user_tries, word):
     error_counter = 0
     counter_for_letter = 0
-    max_tries = difficulty()  # added 'difficulty'
+    max_tries = difficulty()  # added 'difficulty' for choosing a difficulty level
 
     chars_in_word = []
     if generated_word.find('-') == -1:
@@ -186,14 +189,17 @@ def main_program(user_tries, word):
                 slow_print('You are Correct!')
                 counter_for_letter += 1
                 guessed.append(user_try)
-                func_word = word  # made for use in the for loop below (can be ignored)
+                temp_word = word  # made for use in the for loop below (can be ignored as temporary)
                 for u in range(len(word)):
-                    if func_word.find(user_try) == -1:  # check if char is not in word
+                    if temp_word.find(user_try) == -1:  # check if char is not in word
                         break
                     else:
-                        chars_in_word.pop(func_word.find(user_try))  # remove char from list
-                        chars_in_word.insert(func_word.find(user_try.upper()), user_try)  # add user_try to list
-                        func_word = func_word.replace(user_try, str(u), 1)  # modify func_word
+                        
+                        chars_in_word.pop(temp_word.find(user_try))  # remove char from list
+                        chars_in_word.insert(temp_word.find(user_try.upper()), user_try)  # add user_try to list
+                        temp_word = temp_word.replace(user_try, str(u), 1)  # modify temp_word
+                
+                
                 slow_print(str(list_to_string(chars_in_word)))  # print letters user got right
 
                 if word.replace('-', ' ') == list_to_string(chars_in_word):  # if user wins. print win statement
@@ -219,12 +225,12 @@ def main_program(user_tries, word):
                         slow_print('You have used up all your tries, sorry.'
                                    '\nGame Lost!')
                         slow_print('The correct word(s) was:')
-                        slow_print(generated_word)
+                        slow_print(remove_hyphen(generated_word))
                         break
 
 
         else:
-            slow_print('Input Error. Enter a Valid Value.'
+            slow_print('InputError. Enter a Valid Value.'
                        '\nValue has to be a single character from the English Alphabet')
             error_counter += 1
             if error_counter > max_errors:
