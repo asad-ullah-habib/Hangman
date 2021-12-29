@@ -5,15 +5,15 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-speed = 0.0  # speed of print statements
+speed = 0 # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
-                  'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print
+                  'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print statements
 master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisalabad Gujrat Jacobabad '.split(),
                'Shows/Series/Movie': 'Lucifer Peaky-Blinders Squid-Game Twilight Money-Heist '
                                      'Annabelle Home-alone Harry-Potter'.split(), 
                'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
-               } #dictionary of words which eing split using .split() method which stores each word in a list 
+               } #dictionary of words which are being split using .split() method which stores each word in a list
 
 hangman_stages = [r''' # r is for raw string and triple quote is for printing the hangman excatly as given. This was something we have leaned ourselves.
    +---+
@@ -85,7 +85,7 @@ def category_and_word(): # This will let the user choose a category, but word is
     slow_print('Do you want to choose a category? Press Y for yes and N for no:')
     while True:
         ask = input() 
-        if len(ask) ==1 and ask.isalpha() is True:  # checking input
+        if len(ask) == 1 and ask.isalpha() is True:  # checking input
             ask = ask.lower() # all in lower case
             if ask == 'y':
                 slow_print(
@@ -141,7 +141,7 @@ def difficulty(): # let user choose a difficulty level
                     'Choose your difficulty:\n'
                     'Press 1 for Easy (guess the word(s) in 7 tries)\n'  # easy means all 7 tries
                     'Press 2 for Medium (guess the word(s) in 5 tries)\n'  # medium means 5 tries to guess the word
-                    'Press 3 for Hard( guess the word(s) in 3 tries) ')  # hard means only 3 chances will be given for guessing the word
+                    'Press 3 for Hard(guess the word(s) in 3 tries) ')  # hard means only 3 chances will be given for guessing the word
                 for i in range(max_errors + 2):
                     if i < 4:
                         hangman_difficulty = input()
@@ -159,7 +159,6 @@ def difficulty(): # let user choose a difficulty level
                 print('Too many wrong inputs. Easy Level selected')
                 return 7
 
-                
             elif ask == 'n':
                 return 7 # this is the number of user tries 
             else:
@@ -185,12 +184,10 @@ def main_program(user_tries, word):
             else:
                 chars_in_word.extend('_')
 
-    
     if word.find('-') == -1:
         slow_print('Your word has ' + str(len(word)) + ' letters.')
     else:
         slow_print('Your word has ' + str(len(word) - 1) + ' letters.')
-
     slow_print(str(list_to_string(chars_in_word)))
 
     while user_tries <= max_tries - 1:
@@ -213,13 +210,11 @@ def main_program(user_tries, word):
                         chars_in_word.pop(temp_word.find(user_try))  # remove char from list
                         chars_in_word.insert(temp_word.find(user_try.upper()), user_try)  # add user_try to list
                         temp_word = temp_word.replace(user_try, str(u), 1)  # modify temp_word
-                
-                
                 slow_print(str(list_to_string(chars_in_word)))  # print letters user got right
 
                 if word.replace('-', ' ') == list_to_string(chars_in_word):  # if user wins. print win statement
                     slow_print('You won!. Congratulations!!!! \nHave a chocolate.')
-                    time.sleep(2)  # Slow down program, 2 sec pause then program ends
+                    time.sleep(1)  # Slow down program, 1 sec pause then program ends
                     break
 
             else:  # if guess is incorrect
