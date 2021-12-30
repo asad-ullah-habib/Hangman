@@ -5,7 +5,7 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-speed = 0 # speed of print statements
+speed = 0.04 # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print statements
@@ -15,7 +15,7 @@ master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisal
                'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                } #dictionary of words which are being split using .split() method which stores each word in a list
 
-hangman_stages = [r''' # r is for raw string and triple quote is for printing the hangman excatly as given. This was something we have leaned ourselves.
+hangman_stages = [r''' # r is for raw string and triple quotes are for printing the hangman excatly as given. This was something we have leaned ourselves.
    +---+
        |
        |
@@ -62,7 +62,7 @@ def choose_a_word(dictionary, key_value): # Choosing the word from the main dict
     return dictionary[key_values][word_index_value]
 
 
-def slow_print(t): #for printing the message prompt slowly, 
+def slow_print(t): #for printing the message prompt slowly, a new thing we have added ourseleves.
     # https://stackoverflow.com/questions/20302331/typing-effect-in-python
     for i in t:
         sys.stdout.write(i)
@@ -201,7 +201,7 @@ def main_program(user_tries, word):
                 slow_print('You are Correct!')
                 counter_for_letter += 1
                 guessed.append(user_try)
-                temp_word = word  # made for use in the for loop below (can be ignored as temporary)
+                temp_word = word  # made for use in the for loop below 
                 for u in range(len(word)):
                     if temp_word.find(user_try) == -1:  # check if char is not in word
                         break
@@ -228,7 +228,7 @@ def main_program(user_tries, word):
                         slow_print(str(list_to_string(chars_in_word)))
                         guessed.append(user_try)  # make a list of words user has guessed
                         user_tries += 1
-                        print("You have", max_tries - user_tries, "tries left!")
+                        print("You have", max_tries - user_tries, "tries left!") #displays how many tries are left after each incorrect word guessed
 
 
                     else:
@@ -245,9 +245,9 @@ def main_program(user_tries, word):
             error_counter += 1
             if error_counter > max_errors:
                 slow_print('Too many Input Errors!.\n'
-                           'Game over!')
+                           'Game over!') #when there are too many incorrect inputs program ends
                 break
     
 
-generated_word = category_and_word()
+generated_word = category_and_word() 
 main_program(number_of_attempts, generated_word)
