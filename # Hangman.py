@@ -15,7 +15,7 @@ master_dict = {'Cities Of Pakistan': 'Bahawalpur Swat Chitral Sibi Sukkur Faisal
                'Habib': 'Tariq-Rafi Yohsin-Hall Soorty-Hall Amphitheatre Mehfil Bhaitak Zen-Garden Playground'.split()
                } #dictionary of words which are being split using .split() method which stores each word in a list
 
-hangman_stages = [r''' # r is for raw string and triple quotes are for printing the hangman excatly as given. This was something we have leaned ourselves.
+hangman_stages = [r'''     
    +---+
        |
        |
@@ -50,7 +50,8 @@ hangman_stages = [r''' # r is for raw string and triple quotes are for printing 
    O   |
   /|\  |
   / \  |
-      ===''']
+      ==='''] 
+       # r is for raw string and triple quotes are for printing the hangman excatly as given. This was something we have leaned ourselves.
 
 
 def choose_a_word(dictionary, key_value): # Choosing the word from the main dictionary randomly
