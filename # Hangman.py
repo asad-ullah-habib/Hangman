@@ -5,7 +5,7 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-speed = 0.04 # speed of print statements
+speed = 0.0 # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print statements
@@ -152,6 +152,9 @@ def difficulty(): # let user choose a difficulty level
                                 return 5
                             elif hangman_difficulty == '3':
                                 return 3
+                            else:
+
+                                print('Input Error. Value has to be between 1 and 3')
                         else:
                             print('Input Error. Value has to be between 1 and 3')
                     else:
