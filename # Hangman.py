@@ -221,6 +221,7 @@ def main_program(user_tries, word):
                 if user_try in guessed:
                     slow_print('You have already guessed this!')
 
+
                 else:
                     if user_tries < max_tries - 1:
                         slow_print('Your guess is incorrect.\nTry Again')
