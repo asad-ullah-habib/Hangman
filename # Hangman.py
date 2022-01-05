@@ -5,7 +5,7 @@ import time
 max_errors = 3
 number_of_attempts = 0  # added this to fix a bug
 guessed = []  # list of guessed words
-speed = 0.0 # speed of print statements
+speed = 0.04 # speed of print statements
 word_key_value = ''
 list_of_letters = 'First Second Third Fourth Fifth Sixth Seventh Eighth Ninth Tenth Eleventh ' \
                   'Twelfth Thirteenth Fourteenth Fifteenth  '.split()  # needed for print statements
