@@ -153,6 +153,9 @@ def difficulty(): # let user choose a difficulty level
                                 return 5
                             elif hangman_difficulty == '3':
                                 return 3
+                            else:
+
+                                print('Input Error. Value has to be between 1 and 3')
                         else:
                             print('Input Error. Value has to be between 1 and 3')
                     else:
@@ -221,6 +224,7 @@ def main_program(user_tries, word):
             else:  # if guess is incorrect
                 if user_try in guessed:
                     slow_print('You have already guessed this!')
+
 
                 else:
                     if user_tries < max_tries - 1:
